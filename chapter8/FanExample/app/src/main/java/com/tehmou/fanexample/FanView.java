@@ -2,6 +2,7 @@ package com.tehmou.fanexample;
 
 import android.content.Context;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.FrameLayout;
  */
 public class FanView extends FrameLayout {
     private static final String TAG = FanView.class.getSimpleName();
+
+    private float openRatio = 0f;
 
     public FanView(Context context) {
         this(context, null, 0);
@@ -47,7 +50,16 @@ public class FanView extends FrameLayout {
         Log.d(TAG, "params: " + index + ", " + height);
 
         Matrix matrix = t.getMatrix();
-        matrix.setRotate(index * 30, height/2, height/2);
+        matrix.setRotate(index * 30 * openRatio, height/2, height/2);
         return true;
+    }
+
+    public void setOpenRatio(float r) {
+        this.openRatio = r;
+        for (int i = 0; i < getChildCount(); i++) {
+            View view = getChildAt(i);
+            view.invalidate();
+        }
+        invalidate();
     }
 }
