@@ -44,19 +44,20 @@ public class FanView extends FrameLayout {
     @Override
     protected boolean getChildStaticTransformation(View child, Transformation t) {
         Log.d(TAG, "getChildStaticTransformation(" + child + ", " + t + ")");
-        final float index = indexOfChild(child);
+        final float index = getChildCount() - indexOfChild(child) - 1;
         final float height = child.getHeight();
 
         Log.d(TAG, "params: " + index + ", " + height);
 
         Matrix matrix = t.getMatrix();
-        matrix.setRotate(index * 30 * openRatio, height/2, height/2);
+        matrix.setRotate(index * 20 * openRatio, height/2, height/2);
         return true;
     }
 
     public void setOpenRatio(float r) {
         this.openRatio = r;
-        for (int i = 0; i < getChildCount(); i++) {
+        final int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
             View view = getChildAt(i);
             view.invalidate();
         }
