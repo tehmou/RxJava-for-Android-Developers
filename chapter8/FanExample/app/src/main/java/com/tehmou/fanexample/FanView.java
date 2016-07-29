@@ -6,8 +6,13 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Transformation;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ttuo on 28/07/16.
@@ -15,6 +20,7 @@ import android.widget.FrameLayout;
 public class FanView extends FrameLayout {
     private static final String TAG = FanView.class.getSimpleName();
 
+    private List<FanItem> fanItems = new ArrayList<>();
     private float openRatio = 0f;
 
     public FanView(Context context) {
@@ -60,6 +66,22 @@ public class FanView extends FrameLayout {
         for (int i = 0; i < childCount; i++) {
             View view = getChildAt(i);
             view.invalidate();
+        }
+        invalidate();
+    }
+
+    public void setFanItems(List<FanItem> fanItems) {
+        this.fanItems = fanItems;
+        removeAllViewsInLayout();
+        for (int i = 0; i < fanItems.size(); i++) {
+            FanItem fanItem = fanItems.get(fanItems.size() - i - 1);
+            View fanView = inflate(getContext(), R.layout.fan_item, null);
+            TextView textView = (TextView) fanView.findViewById(R.id.fan_view_item_title);
+            textView.setText(fanItem.getTitle());
+            addViewInLayout(fanView, i,
+                    new FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
         }
         invalidate();
     }

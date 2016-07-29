@@ -2,6 +2,8 @@ package com.tehmou.fanexample;
 
 import android.util.Log;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -11,20 +13,27 @@ import rx.subjects.BehaviorSubject;
 public class FanViewModel {
     private static final String TAG = FanViewModel.class.getSimpleName();
 
-    final BehaviorSubject<Boolean> openRatio = BehaviorSubject.create(false);
-    final BehaviorSubject<Float> output = BehaviorSubject.create();
+    private final BehaviorSubject<List<FanItem>> fanItems;
+    private final BehaviorSubject<Boolean> isOpen = BehaviorSubject.create(false);
+    private final BehaviorSubject<Float> openRatio = BehaviorSubject.create();
 
-    public FanViewModel(Observable<Void> clickObservable) {
+    public FanViewModel(Observable<Void> clickObservable,
+                        List<FanItem> fanItems) {
+        this.fanItems = BehaviorSubject.create(fanItems);
         clickObservable
                 .doOnNext(click -> Log.d(TAG, "click"))
-                .subscribe(click -> openRatio.onNext(!openRatio.getValue()));
+                .subscribe(click -> isOpen.onNext(!isOpen.getValue()));
          AnimateToOperator.animate(
-                 openRatio.map(value -> value ? 1f : 0f), 200)
+                 isOpen.map(value -> value ? 1f : 0f), 200)
                  .doOnNext(value -> Log.d(TAG, "value: " + value))
-                 .subscribe(output::onNext);
+                 .subscribe(openRatio::onNext);
     }
 
-    public Observable<Float> getOutput() {
-        return output;
+    public Observable<Float> getOpenRatio() {
+        return openRatio;
+    }
+
+    public Observable<List<FanItem>> getFanItems() {
+        return fanItems;
     }
 }

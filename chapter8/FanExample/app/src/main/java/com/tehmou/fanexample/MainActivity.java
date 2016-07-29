@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.jakewharton.rxbinding.view.RxView;
 
+import java.util.Arrays;
+
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,9 +18,20 @@ public class MainActivity extends AppCompatActivity {
 
         FanView fanView = (FanView) findViewById(R.id.fan_view);
 
-        FanViewModel fanViewModel = new FanViewModel(RxView.clicks(fanView));
+        FanViewModel fanViewModel = new FanViewModel(
+                RxView.clicks(fanView),
+                Arrays.asList(
+                        new FanItem("John Smith"),
+                        new FanItem("Call"),
+                        new FanItem("SMS"),
+                        new FanItem("Send email")
+                ));
         fanViewModel
-                .getOutput()
+                .getFanItems()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(fanView::setFanItems);
+        fanViewModel
+                .getOpenRatio()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fanView::setOpenRatio);
     }
