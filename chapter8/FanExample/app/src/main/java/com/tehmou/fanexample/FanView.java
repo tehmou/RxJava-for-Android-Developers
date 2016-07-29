@@ -74,8 +74,10 @@ public class FanView extends FrameLayout {
         this.fanItems = fanItems;
         removeAllViewsInLayout();
         for (int i = 0; i < fanItems.size(); i++) {
-            FanItem fanItem = fanItems.get(fanItems.size() - i - 1);
-            View fanView = inflate(getContext(), R.layout.fan_item, null);
+            int fanItemIndex = fanItems.size() - i - 1;
+            FanItem fanItem = fanItems.get(fanItemIndex);
+            View fanView = inflate(getContext(),
+                    fanItemIndex == 0 ? R.layout.fan_item_header : R.layout.fan_item, null);
             TextView textView = (TextView) fanView.findViewById(R.id.fan_view_item_title);
             textView.setText(fanItem.getTitle());
             addViewInLayout(fanView, i,
