@@ -2,6 +2,7 @@ package com.tehmou.fanexample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FanView fanView = (FanView) findViewById(R.id.fan_view);
+        View veilView = findViewById(R.id.veil);
 
         FanViewModel fanViewModel = new FanViewModel(
                 RxView.clicks(fanView),
@@ -34,5 +36,10 @@ public class MainActivity extends AppCompatActivity {
                 .getOpenRatio()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fanView::setOpenRatio);
+        fanViewModel
+                .getOpenRatio()
+                .map(ratio -> (int) (64f * ratio))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(veilView.getBackground()::setAlpha);
     }
 }
