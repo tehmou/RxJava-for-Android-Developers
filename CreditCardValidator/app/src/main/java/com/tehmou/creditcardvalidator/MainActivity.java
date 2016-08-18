@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.tehmou.creditcardvalidator.utils.ValidationUtils;
 import java.util.Arrays;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText creditCardNumberView = (EditText) findViewById(R.id.credit_card_number);
         final EditText creditCardCvcView = (EditText) findViewById(R.id.credit_card_cvc);
-        final TextView creditCardType = (TextView) findViewById(R.id.credit_card_type);
+        final TextView creditCardTypeView = (TextView) findViewById(R.id.credit_card_type);
         final TextView errorText = (TextView) findViewById(R.id.error_text);
 
         final Observable<Boolean> creditCardNumberHasFocus =
@@ -115,47 +117,18 @@ public class MainActivity extends AppCompatActivity {
                                         (!creditCardCvcHasFocusValue && !isValidCvcValue));
 
         // Do all side-effects
-        showErrorForCreditCardNumber
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        value -> creditCardNumberView.setTextColor(
-                                value ? Color.RED : Color.BLACK));
+        ValidationUtils.setupTextView(creditCardNumberView, showErrorForCreditCardNumber);
 
-        showErrorForCvc
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        value -> creditCardCvcView.setTextColor(
-                                value ? Color.RED : Color.BLACK));
+        // Show error in case CVC code is not valid
+        ValidationUtils.setupTextView(creditCardCvcView, showErrorForCvc);
 
-        cardType
-                .map(Enum::toString)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(creditCardType::setText);
+        // Show card type (no error)
+        ValidationUtils.setupCardType(creditCardTypeView, cardType);
 
-        Observable.combineLatest(
-                isValidNumber,
-                isValidCvc,
-                (isValidNumberValue, isValidCvcValue) -> isValidNumberValue && isValidCvcValue)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(submitButton::setEnabled);
+        // Enable submit button if number and CVC are valid
+        ValidationUtils.setupSubmitButton(submitButton, isValidNumber, isValidCvc, isKnownCardType);
 
-        Observable.combineLatest(
-                Arrays.asList(
-                        isKnownCardType.map(value -> value ? "" : "Unknown card type"),
-                        isValidCheckSum.map(value -> value ? "" : "Invalid checksum"),
-                        isValidCvc.map(value -> value ? "" : "Invalid CVC code")),
-                (errorStrings) -> {
-                    StringBuilder builder = new StringBuilder();
-                    for (Object errorString : errorStrings) {
-                        if (!"".equals(errorString)) {
-                            builder.append(errorString);
-                            builder.append("\n");
-                        }
-                    }
-                    return builder.toString();
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(errorText::setText);
-
+        // Show a list of errors in the UI
+        ValidationUtils.setupErrorDisplay(errorText, isKnownCardType, isValidCheckSum, isValidCvc);
     }
 }
