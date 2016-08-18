@@ -32,14 +32,18 @@ public class MainActivity extends AppCompatActivity {
                 .getFanItems()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(fanView::setFanItems);
-        fanViewModel
-                .getOpenRatio()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(fanView::setOpenRatio);
-        fanViewModel
-                .getOpenRatio()
-                .map(ratio -> (int) (64f * ratio))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(veilView.getBackground()::setAlpha);
+
+FanView fanView = (FanView) findViewById(R.id.fan_view);
+View dimmerView = findViewById(R.id.dimmer);
+
+fanViewModel
+        .getOpenRatio()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(fanView::setOpenRatio);
+fanViewModel
+        .getOpenRatio()
+        .map(ratio -> (int) (64f * ratio))
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(dimmerView.getBackground()::setAlpha);
     }
 }
