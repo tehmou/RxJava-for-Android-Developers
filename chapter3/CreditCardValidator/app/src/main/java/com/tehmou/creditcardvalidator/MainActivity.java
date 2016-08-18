@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.tehmou.creditcardvalidator.utils.CardType;
 import com.tehmou.creditcardvalidator.utils.FocusWatcherObservable;
 import com.tehmou.creditcardvalidator.utils.TextWatcherObservable;
+import com.tehmou.creditcardvalidator.utils.ValidationUtils;
 
 import java.util.Arrays;
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Observable<Boolean> isValidCheckSum =
                 creditCardNumber
-                        .map(MainActivity::checkCardChecksum);
+                        .map(ValidationUtils::checkCardChecksum);
 
         final Observable<Boolean> isValidNumber =
                 Observable.combineLatest(
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 Observable.combineLatest(
                         cardType,
                         creditCardCvc,
-                        MainActivity::isValidCvc);
+                        ValidationUtils::isValidCvc);
 
         final Observable<Boolean> showErrorForCreditCardNumber =
                 Observable.combineLatest(
@@ -156,35 +157,5 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(errorText::setText);
 
-    }
-
-    private static boolean checkCardChecksum(String number) {
-        Log.d(TAG, "checkCardChecksum(" + number + ")");
-        final int[] digits = new int[number.length()];
-        for (int i = 0; i < number.length(); i++) {
-            digits[i] = Integer.valueOf(number.substring(i, i + 1));
-        }
-        return checkCardChecksum(digits);
-    }
-
-    private static boolean checkCardChecksum(int[] digits) {
-        int sum = 0;
-        int length = digits.length;
-        for (int i = 0; i < length; i++) {
-
-            // Get digits in reverse order
-            int digit = digits[length - i - 1];
-
-            // Every 2nd number multiply with 2
-            if (i % 2 == 1) {
-                digit *= 2;
-            }
-            sum += digit > 9 ? digit - 9 : digit;
-        }
-        return sum % 10 == 0;
-    }
-
-    private static boolean isValidCvc(CardType cardType, String cvc) {
-        return cvc.length() == cardType.getCvcLength();
     }
 }
