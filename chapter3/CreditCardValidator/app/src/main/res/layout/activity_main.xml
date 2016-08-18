@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context=".MainActivity" android:background="#999999">
+    tools:context=".MainActivity" android:background="#eeeeee">
 
     <LinearLayout
         android:id="@+id/container"
@@ -27,13 +27,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
+                android:textColor="#aaa"
                 tools:text="American Express"/>
         </FrameLayout>
         <EditText
             android:id="@+id/credit_card_number"
+            android:layout_marginTop="4dp"
+            android:padding="7dp"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:background="#ffffff"/>
         <FrameLayout
             android:layout_width="match_parent"
@@ -51,8 +55,11 @@
                     android:text="Expires (MM/YY)"/>
                 <EditText
                     android:id="@+id/expiration_date"
+                    android:layout_marginTop="4dp"
+                    android:padding="7dp"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:background="#ffffff"/>
             </LinearLayout>
             <LinearLayout
@@ -66,14 +73,18 @@
                     android:text="CVC"/>
                 <EditText
                     android:id="@+id/credit_card_cvc"
+                    android:layout_marginTop="4dp"
+                    android:padding="7dp"
                     android:inputType="number"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:background="#ffffff"/>
             </LinearLayout>
         </FrameLayout>
         <Button
             android:id="@+id/submit_button"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit" />

@@ -117,14 +117,14 @@ public class MainActivity extends AppCompatActivity {
         showErrorForCreditCardNumber
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        value -> creditCardNumberView.setBackgroundColor(
-                                value ? Color.RED : Color.WHITE));
+                        value -> creditCardNumberView.setTextColor(
+                                value ? Color.RED : Color.BLACK));
 
         showErrorForCvc
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        value -> creditCardCvcView.setBackgroundColor(
-                                value ? Color.RED : Color.WHITE));
+                        value -> creditCardCvcView.setTextColor(
+                                value ? Color.RED : Color.BLACK));
 
         cardType
                 .map(Enum::toString)
