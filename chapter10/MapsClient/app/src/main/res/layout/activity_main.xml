@@ -10,6 +10,7 @@
     tools:context="com.tehmou.mapsclient.MainActivity">
 
     <com.tehmou.mapsclient.TilesView
+        android:id="@+id/tiles_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

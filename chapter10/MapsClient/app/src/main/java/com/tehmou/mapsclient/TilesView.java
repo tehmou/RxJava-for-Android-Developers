@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Collection;
+
 /**
  * Created by ttuo on 21/09/16.
  */
@@ -25,11 +27,31 @@ public class TilesView extends View {
     }
 
     private void init() {
-
+        tilePaint = new Paint();
+        tilePaint.setColor(Color.BLACK);
+        tilePaint.setStyle(Paint.Style.STROKE);
+        tilePaint.setStrokeWidth(2);
     }
+
+    private Collection<DrawableTile> tiles;
+    private Paint tilePaint;
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.RED);
+        canvas.drawColor(Color.GRAY);
+        if (tiles != null) {
+            for (DrawableTile tile : tiles) {
+                canvas.drawRect(
+                        tile.getScreenX(), tile.getScreenY(),
+                        tile.getScreenX() + tile.getWidth(),
+                        tile.getScreenY() + tile.getHeight(),
+                        tilePaint);
+            }
+        }
+    }
+
+    public void setTiles(Collection<DrawableTile> tiles) {
+        this.tiles = tiles;
+        invalidate();
     }
 }
