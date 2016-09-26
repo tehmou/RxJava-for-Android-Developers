@@ -19,77 +19,32 @@ import rx.schedulers.Schedulers;
 public class MainActivityLoader extends android.support.v4.content.Loader<MainActivityViewModel> {
     private static final String TAG = MainActivityLoader.class.getSimpleName();
 
-    private Gson gson;
-    private final ChatMessageRepository chatMessageRepository = new ChatMessageRepository();
-    private final ChatMessageApi chatMessageApi;
-
-    private Subscription messageSubscription;
-    private Socket socket;
+    private DataLayer dataLayer;
     private MainActivityViewModel mainActivityViewModel;
 
-    public MainActivityLoader(Context context) {
+    public MainActivityLoader(Context context, DataLayer dataLayer) {
         super(context);
         Log.d(TAG, "MainActivityLoader");
-
-        gson = new Gson();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://blooming-brook-85633.herokuapp.com/")
-                .build();
-        chatMessageApi = retrofit.create(ChatMessageApi.class);
-        chatMessageApi.messages()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(messages -> {
-                    for (String messageJson : messages) {
-                        ChatMessage chatMessage = gson.fromJson(messageJson, ChatMessage.class);
-                        chatMessageRepository.put(new ChatMessage(chatMessage, false));
-                    }
-                });
+        this.dataLayer = dataLayer;
     }
 
     @Override
     protected void onStartLoading() {
         Log.d(TAG, "onStartLoading");
-
         if (mainActivityViewModel != null) {
             deliverResult(mainActivityViewModel);
             return;
         }
-
         forceLoad();
     }
 
     @Override
     protected void onForceLoad() {
         Log.d(TAG, "onForceLoad");
-
-        socket = SocketUtil.createSocket();
-        socket.connect();
-
-        messageSubscription = SocketUtil.createMessageListener(socket)
-                .subscribe(messageString -> {
-                    Log.d(TAG, "chat message: " + messageString);
-                    ChatMessage message = gson.fromJson(messageString, ChatMessage.class);
-                    chatMessageRepository.put(new ChatMessage(message, false));
-                });
-
+        dataLayer.connectSocket();
         mainActivityViewModel = new MainActivityViewModel(
-                chatMessageRepository.getMessageListStream(),
-                message -> {
-                    ChatMessage chatMessage = new ChatMessage(
-                            UUID.randomUUID().toString(),
-                            message,
-                            new Date().getTime(),
-                            true
-                    );
-                    chatMessageRepository.put(chatMessage);
-                    String json = gson.toJson(chatMessage);
-                    Log.d(TAG, "sending message: " + json);
-                    socket.emit("chat message", json);
-                }
+                dataLayer.getMessageListStream(),
+                dataLayer::sendChatMessage
         );
         mainActivityViewModel.subscribe();
         deliverResult(mainActivityViewModel);
@@ -98,10 +53,8 @@ public class MainActivityLoader extends android.support.v4.content.Loader<MainAc
     @Override
     protected void onReset() {
         Log.d(TAG, "onReset");
-        messageSubscription.unsubscribe();
+        dataLayer.disconnectSocket();
         mainActivityViewModel.unsubscribe();
         mainActivityViewModel = null;
-        socket.disconnect();
-        socket = null;
     }
 }

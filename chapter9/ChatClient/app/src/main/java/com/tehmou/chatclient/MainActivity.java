@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Loader<MainActivityViewModel> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader(" + id + ")");
-        return new MainActivityLoader(this);
+        return new MainActivityLoader(this,
+                ((ChatClientApplication) getApplication()).getDataLayer());
     }
 
     @Override
