@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="New Game"
         android:layout_below="@id/grid_view"/>
+
+    <com.tehmou.tictactoe.GameStateView
+        android:id="@+id/game_state_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reset_button"/>
 </RelativeLayout>

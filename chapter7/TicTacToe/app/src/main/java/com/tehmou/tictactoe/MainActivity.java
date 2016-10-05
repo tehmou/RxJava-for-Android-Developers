@@ -24,38 +24,56 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TTTGridView gridView = (TTTGridView) findViewById(R.id.grid_view);
+        GameStateView gameStateView = (GameStateView) findViewById(R.id.game_state_view);
 
-        final TTTGameState emptyGame = new TTTGameState.TTTGameStateBuilder()
+        final TTTGameGrid emptyGame = new TTTGameGrid.TTTGameGridBuilder()
                 .setPlayerInTurn(TTTSymbol.CIRCLE)
                 .build();
 
-        // Create the placeholder for the gameState, we need this because of the cyclic chain
-        final BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create(emptyGame);
+        // Create the placeholder for the gameGrid and gameState,
+        // we need these because of the cyclic chain
+        final BehaviorSubject<TTTGameGrid> gameGridSubject = BehaviorSubject.create(emptyGame);
+        final BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create();
 
         // Get state changes from the reset button that starts a new game
-        final Observable<TTTGameState> gameStateUpdatesFromReset =
+        final Observable<TTTGameGrid> gameStateUpdatesFromReset =
                 RxView.clicks(findViewById(R.id.reset_button)).map(event -> emptyGame);
 
         // Get state changes based on the user playing the game
-        final Observable<TTTGameState.GridPosition> touchesOnGrid =
+        final Observable<TTTGameGrid.GridPosition> touchesOnGrid =
                 getTouchesOnGrid(gridView, emptyGame.getWidth(), emptyGame.getHeight());
 
-        final Observable<TTTGameState> gameStateUpdatesFromTouch =
-                getGameStateUpdatesFromTouch(touchesOnGrid, gameStateSubject);
+        final Observable<TTTGameGrid> gameStateUpdatesFromTouch =
+                getGameStateUpdatesFromTouch(touchesOnGrid, gameGridSubject);
 
         // Aggregate updates from all sources that can change the gameState
         Observable.merge(
                 gameStateUpdatesFromReset,
                 gameStateUpdatesFromTouch
-        ).subscribe(gameStateSubject::onNext);
+        ).subscribe(gameGridSubject::onNext);
+
+        gameGridSubject
+                .map(MainActivity::calculateGameState)
+                .subscribe(gameStateSubject::onNext);
 
         gameStateSubject
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(gameStateView::setData);
+
+        gameGridSubject
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(gridView::setData);
     }
 
-    private static Observable<TTTGameState.GridPosition> getTouchesOnGrid(View gridView,
-                                                                          int gridWidth, int gridHeight) {
+    private static TTTGameState calculateGameState(TTTGameGrid gameGrid) {
+        return new TTTGameState.TTTGameStateBuilder()
+                .setIsEnded(false)
+                .setWinner(null)
+                .build();
+    }
+
+    private static Observable<TTTGameGrid.GridPosition> getTouchesOnGrid(View gridView,
+                                                                         int gridWidth, int gridHeight) {
         return RxView.touches(gridView, motionEvent -> true)
                 .doOnNext(ev -> Log.d(TAG, "touch: " + ev))
                 .filter(ev -> ev.getAction() == MotionEvent.ACTION_UP)
@@ -66,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
                     float ry = ev.getY() / (float)(gridView.getHeight()+1);
                     int y = (int)(ry * gridHeight);
 
-                    return new TTTGameState.GridPosition(x, y);
+                    return new TTTGameGrid.GridPosition(x, y);
                 });
     }
 
-    private static Observable<TTTGameState.GridPosition> getAllowedTouchesOnGrid(Observable<TTTGameState.GridPosition> touchesOnGrid,
-                                                                                 Observable<TTTGameState> gameState) {
+    private static Observable<TTTGameGrid.GridPosition> getAllowedTouchesOnGrid(Observable<TTTGameGrid.GridPosition> touchesOnGrid,
+                                                                                Observable<TTTGameGrid> gameState) {
         return touchesOnGrid
                         .doOnNext(position -> Log.d(TAG, "Touching in position: " + position))
                         .withLatestFrom(gameState, Pair::new)
@@ -81,18 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private static Observable<TTTGameState> getGameStateUpdatesFromTouch(Observable<TTTGameState.GridPosition> touchesOnGrid,
-                                                                         Observable<TTTGameState> gameState) {
+    private static Observable<TTTGameGrid> getGameStateUpdatesFromTouch(Observable<TTTGameGrid.GridPosition> touchesOnGrid,
+                                                                        Observable<TTTGameGrid> gameState) {
         return getAllowedTouchesOnGrid(touchesOnGrid, gameState)
                 .doOnNext(position -> Log.d(TAG, "Playing in position: " + position))
                 .withLatestFrom(
                         gameState,
                         (playerMove, gameStateValue) ->
-                                new TTTGameState.TTTGameStateBuilder(gameStateValue)
+                                new TTTGameGrid.TTTGameGridBuilder(gameStateValue)
                                         .setSymbol(playerMove, gameStateValue.getPlayerInTurn())
                                         .build())
                 .map(gameStateValue ->
-                        new TTTGameState.TTTGameStateBuilder(gameStateValue)
+                        new TTTGameGrid.TTTGameGridBuilder(gameStateValue)
                                 .setPlayerInTurn(
                                         gameStateValue.getPlayerInTurn() == TTTSymbol.CIRCLE ? TTTSymbol.CROSS : TTTSymbol.CIRCLE)
                                 .build());

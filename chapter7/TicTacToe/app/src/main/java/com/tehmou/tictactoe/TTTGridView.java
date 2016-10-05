@@ -10,7 +10,7 @@ import android.view.View;
 
 public class TTTGridView extends View {
     private static final String TAG = TTTGridView.class.getSimpleName();
-    private TTTGameState gameState;
+    private TTTGameGrid gameState;
     private int width;
     private int height;
     private final Paint linePaint;
@@ -87,7 +87,7 @@ public class TTTGridView extends View {
         }
     }
 
-    public void setData(TTTGameState gameState) {
+    public void setData(TTTGameGrid gameState) {
         this.gameState = gameState;
         invalidate();
     }
