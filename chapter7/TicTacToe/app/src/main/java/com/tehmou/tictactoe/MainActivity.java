@@ -29,17 +29,21 @@ public class MainActivity extends AppCompatActivity {
                 .setPlayerInTurn(TTTSymbol.CIRCLE)
                 .build();
 
+        // Create the placeholder for the gameState, we need this because of the cyclic chain
         final BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create(emptyGame);
 
+        // Get state changes from the reset button that starts a new game
         final Observable<TTTGameState> gameStateUpdatesFromReset =
                 RxView.clicks(findViewById(R.id.reset_button)).map(event -> emptyGame);
 
+        // Get state changes based on the user playing the game
         final Observable<TTTGameState.GridPosition> touchesOnGrid =
                 getTouchesOnGrid(gridView, emptyGame.getWidth(), emptyGame.getHeight());
 
         final Observable<TTTGameState> gameStateUpdatesFromTouch =
                 getGameStateUpdatesFromTouch(touchesOnGrid, gameStateSubject);
 
+        // Aggregate updates from all sources that can change the gameState
         Observable.merge(
                 gameStateUpdatesFromReset,
                 gameStateUpdatesFromTouch
