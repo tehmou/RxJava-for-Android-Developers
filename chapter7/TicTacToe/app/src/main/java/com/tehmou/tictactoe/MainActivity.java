@@ -5,6 +5,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -29,18 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         Observable<TTTGameState.GridPosition> touchesOnGrid =
-            RxView.touches(gridView, motionEvent -> true)
-                    .doOnNext(ev -> Log.d(TAG, "touch: " + ev))
-                    .filter(ev -> ev.getAction() == MotionEvent.ACTION_UP)
-                    .map(ev -> {
-                        float rx = ev.getX() / (float)(gridView.getWidth()+1);
-                        int x = (int)(rx * gameState.getWidth());
-
-                        float ry = ev.getY() / (float)(gridView.getHeight()+1);
-                        int y = (int)(ry * gameState.getHeight());
-
-                        return new TTTGameState.GridPosition(x, y);
-                    });
+                getTouchesOnGrid(gridView, gameState.getWidth(), gameState.getHeight());
 
         BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create(gameState);
 
@@ -77,22 +67,19 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(gridView::setData);
     }
 
-    private static class PlayerMove {
-        private final TTTGameState.GridPosition position;
-        private final TTTSymbol symbol;
+    private static Observable<TTTGameState.GridPosition> getTouchesOnGrid(View gridView,
+                                                                          int gridWidth, int gridHeight) {
+        return RxView.touches(gridView, motionEvent -> true)
+                .doOnNext(ev -> Log.d(TAG, "touch: " + ev))
+                .filter(ev -> ev.getAction() == MotionEvent.ACTION_UP)
+                .map(ev -> {
+                    float rx = ev.getX() / (float)(gridView.getWidth()+1);
+                    int x = (int)(rx * gridWidth);
 
+                    float ry = ev.getY() / (float)(gridView.getHeight()+1);
+                    int y = (int)(ry * gridHeight);
 
-        public PlayerMove(TTTGameState.GridPosition position, TTTSymbol symbol) {
-            this.position = position;
-            this.symbol = symbol;
-        }
-
-        public TTTGameState.GridPosition getPosition() {
-            return position;
-        }
-
-        public TTTSymbol getSymbol() {
-            return symbol;
-        }
+                    return new TTTGameState.GridPosition(x, y);
+                });
     }
 }
