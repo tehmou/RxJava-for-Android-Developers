@@ -34,6 +34,17 @@ public class GameGrid {
                 position.getY() >= 0 && position.getY() < getHeight();
     }
 
+    public Boolean isFull() {
+        for (int i = 0; i < getWidth(); i++) {
+            for (int n = 0; n < getHeight(); n++) {
+                if (getSymbolAt(i, n) == GameSymbol.EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static class GameGridBuilder {
         private GameSymbol[][] grid;
         private GameSymbol playerInTurn;
