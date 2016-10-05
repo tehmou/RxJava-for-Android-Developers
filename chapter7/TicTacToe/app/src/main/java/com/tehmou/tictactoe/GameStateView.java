@@ -17,7 +17,7 @@ public class GameStateView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setData(TTTGameState gameState) {
+    public void setData(GameState gameState) {
         this.setText("Ended: " + gameState.isEnded() + ", winner: " + gameState.getWinner());
     }
 }

@@ -8,24 +8,24 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-public class TTTGridView extends View {
-    private static final String TAG = TTTGridView.class.getSimpleName();
-    private TTTGameGrid gameState;
+public class GameGridView extends View {
+    private static final String TAG = GameGridView.class.getSimpleName();
+    private GameGrid gameState;
     private int width;
     private int height;
     private final Paint linePaint;
     private final Paint circlePaint;
     private final Paint crossPaint;
 
-    public TTTGridView(Context context) {
+    public GameGridView(Context context) {
         this(context, null);
     }
 
-    public TTTGridView(Context context, AttributeSet attrs) {
+    public GameGridView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TTTGridView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GameGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         linePaint = new Paint();
@@ -71,13 +71,13 @@ public class TTTGridView extends View {
 
         for (int i = 0; i < gameState.getWidth(); i++) {
             for (int n = 0; n < gameState.getHeight(); n++) {
-                TTTSymbol symbol = gameState.getSymbolAt(i, n);
-                if (symbol == TTTSymbol.CIRCLE) {
+                GameSymbol symbol = gameState.getSymbolAt(i, n);
+                if (symbol == GameSymbol.CIRCLE) {
                     canvas.drawRect(
                             i * tileWidth, n * tileHeight,
                             (i+1) * tileWidth, (n+1) * tileHeight,
                             circlePaint);
-                } else if (symbol == TTTSymbol.CROSS) {
+                } else if (symbol == GameSymbol.CROSS) {
                     canvas.drawRect(
                             i * tileWidth, n * tileHeight,
                             (i+1) * tileWidth, (n+1) * tileHeight,
@@ -87,7 +87,7 @@ public class TTTGridView extends View {
         }
     }
 
-    public void setData(TTTGameGrid gameState) {
+    public void setData(GameGrid gameState) {
         this.gameState = gameState;
         invalidate();
     }

@@ -23,27 +23,27 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        TTTGridView gridView = (TTTGridView) findViewById(R.id.grid_view);
+        GameGridView gameGridView = (GameGridView) findViewById(R.id.grid_view);
         GameStateView gameStateView = (GameStateView) findViewById(R.id.game_state_view);
 
-        final TTTGameGrid emptyGame = new TTTGameGrid.TTTGameGridBuilder()
-                .setPlayerInTurn(TTTSymbol.CIRCLE)
+        final GameGrid emptyGame = new GameGrid.GameGridBuilder()
+                .setPlayerInTurn(GameSymbol.CIRCLE)
                 .build();
 
         // Create the placeholder for the gameGrid and gameState,
         // we need these because of the cyclic chain
-        final BehaviorSubject<TTTGameGrid> gameGridSubject = BehaviorSubject.create(emptyGame);
-        final BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create();
+        final BehaviorSubject<GameGrid> gameGridSubject = BehaviorSubject.create(emptyGame);
+        final BehaviorSubject<GameState> gameStateSubject = BehaviorSubject.create();
 
         // Get state changes from the reset button that starts a new game
-        final Observable<TTTGameGrid> gameStateUpdatesFromReset =
+        final Observable<GameGrid> gameStateUpdatesFromReset =
                 RxView.clicks(findViewById(R.id.reset_button)).map(event -> emptyGame);
 
         // Get state changes based on the user playing the game
-        final Observable<TTTGameGrid.GridPosition> touchesOnGrid =
-                getTouchesOnGrid(gridView, emptyGame.getWidth(), emptyGame.getHeight());
+        final Observable<GameGrid.GridPosition> touchesOnGrid =
+                getTouchesOnGrid(gameGridView, emptyGame.getWidth(), emptyGame.getHeight());
 
-        final Observable<TTTGameGrid> gameStateUpdatesFromTouch =
+        final Observable<GameGrid> gameStateUpdatesFromTouch =
                 getGameStateUpdatesFromTouch(touchesOnGrid, gameGridSubject);
 
         // Aggregate updates from all sources that can change the gameState
@@ -62,18 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
         gameGridSubject
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(gridView::setData);
+                .subscribe(gameGridView::setData);
     }
 
-    private static TTTGameState calculateGameState(TTTGameGrid gameGrid) {
-        return new TTTGameState.TTTGameStateBuilder()
+    private static GameState calculateGameState(GameGrid gameGrid) {
+        return new GameState.GameStateBuilder()
                 .setIsEnded(false)
                 .setWinner(null)
                 .build();
     }
 
-    private static Observable<TTTGameGrid.GridPosition> getTouchesOnGrid(View gridView,
-                                                                         int gridWidth, int gridHeight) {
+    private static Observable<GameGrid.GridPosition> getTouchesOnGrid(View gridView,
+                                                                      int gridWidth, int gridHeight) {
         return RxView.touches(gridView, motionEvent -> true)
                 .doOnNext(ev -> Log.d(TAG, "touch: " + ev))
                 .filter(ev -> ev.getAction() == MotionEvent.ACTION_UP)
@@ -84,35 +84,35 @@ public class MainActivity extends AppCompatActivity {
                     float ry = ev.getY() / (float)(gridView.getHeight()+1);
                     int y = (int)(ry * gridHeight);
 
-                    return new TTTGameGrid.GridPosition(x, y);
+                    return new GameGrid.GridPosition(x, y);
                 });
     }
 
-    private static Observable<TTTGameGrid.GridPosition> getAllowedTouchesOnGrid(Observable<TTTGameGrid.GridPosition> touchesOnGrid,
-                                                                                Observable<TTTGameGrid> gameState) {
+    private static Observable<GameGrid.GridPosition> getAllowedTouchesOnGrid(Observable<GameGrid.GridPosition> touchesOnGrid,
+                                                                             Observable<GameGrid> gameState) {
         return touchesOnGrid
                         .doOnNext(position -> Log.d(TAG, "Touching in position: " + position))
                         .withLatestFrom(gameState, Pair::new)
                         .filter(pair -> pair.second.isInsideGrid(pair.first))
-                        .filter(pair -> pair.second.getSymbolAt(pair.first) == TTTSymbol.EMPTY)
+                        .filter(pair -> pair.second.getSymbolAt(pair.first) == GameSymbol.EMPTY)
                         .map(pair -> pair.first);
 
     }
 
-    private static Observable<TTTGameGrid> getGameStateUpdatesFromTouch(Observable<TTTGameGrid.GridPosition> touchesOnGrid,
-                                                                        Observable<TTTGameGrid> gameState) {
+    private static Observable<GameGrid> getGameStateUpdatesFromTouch(Observable<GameGrid.GridPosition> touchesOnGrid,
+                                                                     Observable<GameGrid> gameState) {
         return getAllowedTouchesOnGrid(touchesOnGrid, gameState)
                 .doOnNext(position -> Log.d(TAG, "Playing in position: " + position))
                 .withLatestFrom(
                         gameState,
                         (playerMove, gameStateValue) ->
-                                new TTTGameGrid.TTTGameGridBuilder(gameStateValue)
+                                new GameGrid.GameGridBuilder(gameStateValue)
                                         .setSymbol(playerMove, gameStateValue.getPlayerInTurn())
                                         .build())
                 .map(gameStateValue ->
-                        new TTTGameGrid.TTTGameGridBuilder(gameStateValue)
+                        new GameGrid.GameGridBuilder(gameStateValue)
                                 .setPlayerInTurn(
-                                        gameStateValue.getPlayerInTurn() == TTTSymbol.CIRCLE ? TTTSymbol.CROSS : TTTSymbol.CIRCLE)
+                                        gameStateValue.getPlayerInTurn() == GameSymbol.CIRCLE ? GameSymbol.CROSS : GameSymbol.CIRCLE)
                                 .build());
     }
 }

@@ -1,19 +1,19 @@
 package com.tehmou.tictactoe;
 
-public class TTTGameGrid {
-    private final TTTSymbol[][] grid;
-    private final TTTSymbol playerInTurn;
+public class GameGrid {
+    private final GameSymbol[][] grid;
+    private final GameSymbol playerInTurn;
 
-    private TTTGameGrid(TTTGameGridBuilder builder) {
+    private GameGrid(GameGridBuilder builder) {
         this.grid = builder.grid;
         this.playerInTurn = builder.playerInTurn;
     }
 
-    public TTTSymbol getSymbolAt(GridPosition position) {
+    public GameSymbol getSymbolAt(GridPosition position) {
         return getSymbolAt(position.x, position.y);
     }
 
-    public TTTSymbol getSymbolAt(int x, int y) {
+    public GameSymbol getSymbolAt(int x, int y) {
         return grid[x][y];
     }
 
@@ -25,7 +25,7 @@ public class TTTGameGrid {
         return grid[0].length;
     }
 
-    public TTTSymbol getPlayerInTurn() {
+    public GameSymbol getPlayerInTurn() {
         return playerInTurn;
     }
 
@@ -34,44 +34,44 @@ public class TTTGameGrid {
                 position.getY() >= 0 && position.getY() < getHeight();
     }
 
-    public static class TTTGameGridBuilder {
-        private TTTSymbol[][] grid;
-        private TTTSymbol playerInTurn;
+    public static class GameGridBuilder {
+        private GameSymbol[][] grid;
+        private GameSymbol playerInTurn;
 
-        public TTTGameGridBuilder() {
-            grid = new TTTSymbol[3][3];
+        public GameGridBuilder() {
+            grid = new GameSymbol[3][3];
             for (int i = 0; i < 3; i++) {
                 for (int n = 0; n < 3; n++) {
-                    grid[i][n] = TTTSymbol.EMPTY;
+                    grid[i][n] = GameSymbol.EMPTY;
                 }
             }
         }
 
-        public TTTGameGridBuilder(TTTGameGrid gameState) {
+        public GameGridBuilder(GameGrid gameState) {
             // Make a copy
-            grid = new TTTSymbol[3][3];
+            grid = new GameSymbol[3][3];
             for (int i = 0; i < 3; i ++) {
                 System.arraycopy(gameState.grid[i], 0, grid[i], 0, 3);
             }
             playerInTurn = gameState.playerInTurn;
         }
 
-        public TTTGameGridBuilder setSymbol(GridPosition position, TTTSymbol symbol) {
+        public GameGridBuilder setSymbol(GridPosition position, GameSymbol symbol) {
             return setSymbol(position.getX(), position.getY(), symbol);
         }
 
-        public TTTGameGridBuilder setSymbol(int x, int y, TTTSymbol symbol) {
+        public GameGridBuilder setSymbol(int x, int y, GameSymbol symbol) {
             grid[x][y] = symbol;
             return this;
         }
 
-        public TTTGameGridBuilder setPlayerInTurn(TTTSymbol symbol) {
+        public GameGridBuilder setPlayerInTurn(GameSymbol symbol) {
             this.playerInTurn = symbol;
             return this;
         }
 
-        public TTTGameGrid build() {
-            return new TTTGameGrid(this);
+        public GameGrid build() {
+            return new GameGrid(this);
         }
     }
 

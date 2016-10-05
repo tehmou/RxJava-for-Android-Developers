@@ -1,5 +1,5 @@
 package com.tehmou.tictactoe;
 
-public enum TTTSymbol {
+public enum GameSymbol {
     EMPTY, CIRCLE, CROSS
 }

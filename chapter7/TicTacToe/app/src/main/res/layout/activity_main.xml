@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tehmou.tictactoe.MainActivity">
 
-    <com.tehmou.tictactoe.TTTGridView
+    <com.tehmou.tictactoe.GameGridView
         android:id="@+id/grid_view"
         android:layout_width="300dp"
         android:layout_height="300dp"/>
