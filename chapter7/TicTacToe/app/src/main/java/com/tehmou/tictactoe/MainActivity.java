@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 getTouchesOnGrid(gameGridView, emptyGame.getWidth(), emptyGame.getHeight());
 
         final Observable<GameGrid> gameStateUpdatesFromTouch =
-                getGameStateUpdatesFromTouch(touchesOnGrid, gameGridSubject);
+                getGameStateUpdatesFromTouch(
+                        touchesOnGrid, gameGridSubject, gameStateSubject);
 
         // Aggregate updates from all sources that can change the gameState
         Observable.merge(
@@ -111,11 +112,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static Observable<GameGrid> getGameStateUpdatesFromTouch(Observable<GameGrid.GridPosition> touchesOnGrid,
-                                                                     Observable<GameGrid> gameState) {
-        return getAllowedTouchesOnGrid(touchesOnGrid, gameState)
+                                                                     Observable<GameGrid> gameGrid,
+                                                                     Observable<GameState> gameState) {
+        return getAllowedTouchesOnGrid(touchesOnGrid, gameGrid)
                 .doOnNext(position -> Log.d(TAG, "Playing in position: " + position))
+                .flatMap(playerMove ->
+                        Observable.just(playerMove)
+                                .withLatestFrom(gameState, Pair::new)
+                                .filter(pair -> !pair.second.isEnded())
+                                .map(pair -> pair.first))
                 .withLatestFrom(
-                        gameState,
+                        gameGrid,
                         (playerMove, gameStateValue) ->
                                 new GameGrid.GameGridBuilder(gameStateValue)
                                         .setSymbol(playerMove, gameStateValue.getPlayerInTurn())
