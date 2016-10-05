@@ -25,20 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
         TTTGridView gridView = (TTTGridView) findViewById(R.id.grid_view);
 
-        final TTTGameState gameState = new TTTGameState.TTTGameStateBuilder()
+        final TTTGameState emptyGame = new TTTGameState.TTTGameStateBuilder()
                 .setPlayerInTurn(TTTSymbol.CIRCLE)
                 .build();
 
-        Observable<TTTGameState.GridPosition> touchesOnGrid =
-                getTouchesOnGrid(gridView, gameState.getWidth(), gameState.getHeight());
+        final Observable<TTTGameState.GridPosition> touchesOnGrid =
+                getTouchesOnGrid(gridView, emptyGame.getWidth(), emptyGame.getHeight());
 
-        BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create(gameState);
+        final BehaviorSubject<TTTGameState> gameStateSubject = BehaviorSubject.create(emptyGame);
 
-        findViewById(R.id.reset_button)
-                .setOnClickListener(
-                        ev -> gameStateSubject.onNext(gameState));
+        final Observable<TTTGameState> gameStateUpdatesFromReset =
+                RxView.clicks(findViewById(R.id.reset_button)).map(event -> emptyGame);
 
-        Observable<TTTGameState.GridPosition> allowedTouchesOnGrid =
+        final Observable<TTTGameState.GridPosition> allowedTouchesOnGrid =
                 touchesOnGrid
                         .doOnNext(position -> Log.d(TAG, "Touching in position: " + position))
                         .withLatestFrom(gameStateSubject, Pair::new)
@@ -46,21 +45,25 @@ public class MainActivity extends AppCompatActivity {
                         .filter(pair -> pair.second.getSymbolAt(pair.first) == TTTSymbol.EMPTY)
                         .map(pair -> pair.first);
 
-        allowedTouchesOnGrid
-                .doOnNext(position -> Log.d(TAG, "Playing in position: " + position))
-                .withLatestFrom(
-                        gameStateSubject,
-                        (playerMove, gameStateValue) ->
-                        new TTTGameState.TTTGameStateBuilder(gameStateValue)
-                                .setSymbol(playerMove, gameStateValue.getPlayerInTurn())
-                                .build())
-                .map(gameStateValue ->
-                        new TTTGameState.TTTGameStateBuilder(gameStateValue)
-                                .setPlayerInTurn(
-                                        gameStateValue.getPlayerInTurn() == TTTSymbol.CIRCLE ? TTTSymbol.CROSS : TTTSymbol.CIRCLE)
-                                .build())
-                .subscribe(gameStateSubject::onNext,
-                        e -> Log.d(TAG, "Error processing gameState", e));
+        final Observable<TTTGameState> gameStateUpdatesFromTouch =
+                allowedTouchesOnGrid
+                        .doOnNext(position -> Log.d(TAG, "Playing in position: " + position))
+                        .withLatestFrom(
+                                gameStateSubject,
+                                (playerMove, gameStateValue) ->
+                                new TTTGameState.TTTGameStateBuilder(gameStateValue)
+                                        .setSymbol(playerMove, gameStateValue.getPlayerInTurn())
+                                        .build())
+                        .map(gameStateValue ->
+                                new TTTGameState.TTTGameStateBuilder(gameStateValue)
+                                        .setPlayerInTurn(
+                                                gameStateValue.getPlayerInTurn() == TTTSymbol.CIRCLE ? TTTSymbol.CROSS : TTTSymbol.CIRCLE)
+                                        .build());
+
+        Observable.merge(
+                gameStateUpdatesFromReset,
+                gameStateUpdatesFromTouch
+        ).subscribe(gameStateSubject::onNext);
 
         gameStateSubject
                 .observeOn(AndroidSchedulers.mainThread())
