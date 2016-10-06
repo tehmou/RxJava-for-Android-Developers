@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static GameState calculateGameState(GameGrid gameGrid) {
-        final GameSymbol winner = calculateWinnerForGrid(gameGrid);
+        final GameSymbol winner = GameUtils.calculateWinnerForGrid(gameGrid);
         if (winner != null) {
             return new GameState.GameStateBuilder()
                     .setIsEnded(true)
@@ -132,73 +132,5 @@ public class MainActivity extends AppCompatActivity {
                                 .setPlayerInTurn(
                                         gameStateValue.getPlayerInTurn() == GameSymbol.CIRCLE ? GameSymbol.CROSS : GameSymbol.CIRCLE)
                                 .build());
-    }
-
-    private static GameSymbol calculateWinnerForGrid(GameGrid gameGrid) {
-        GameSymbol[] row;
-        GameSymbol winner;
-
-        // Horizontals
-        for (int n = 0; n < gameGrid.getHeight(); n++) {
-            row = new GameSymbol[3];
-            for (int i = 0; i < gameGrid.getWidth(); i++) {
-                row[i] = gameGrid.getSymbolAt(i, n);
-            }
-            winner = calculateWinnerForRow(row);
-            if (winner != null) {
-                return winner;
-            }
-        }
-
-        // Verticals
-        for (int i = 0; i < gameGrid.getWidth(); i++) {
-            row = new GameSymbol[3];
-            for (int n = 0; n < gameGrid.getHeight(); n++) {
-                row[i] = gameGrid.getSymbolAt(i, n);
-            }
-            winner = calculateWinnerForRow(row);
-            if (winner != null) {
-                return winner;
-            }
-        }
-
-        // Diagonals
-        row = new GameSymbol[3];
-        for (int i = 0; i < gameGrid.getWidth(); i++) {
-            for (int n = 0; n < gameGrid.getHeight(); n++) {
-                row[i] = gameGrid.getSymbolAt(i, n);
-            }
-        }
-        winner = calculateWinnerForRow(row);
-        if (winner != null) {
-            return winner;
-        }
-
-        row = new GameSymbol[3];
-        for (int i = gameGrid.getWidth() - 1; i >= 0; i--) {
-            for (int n = 0; n < gameGrid.getHeight(); n++) {
-                row[i] = gameGrid.getSymbolAt(i, n);
-            }
-        }
-        winner = calculateWinnerForRow(row);
-        if (winner != null) {
-            return winner;
-        }
-
-        return GameSymbol.EMPTY;
-    }
-
-    private static GameSymbol calculateWinnerForRow(GameSymbol[] row) {
-        GameSymbol lastGameSymbol = null;
-        for (GameSymbol gameSymbol : row) {
-            if (gameSymbol == GameSymbol.EMPTY) {
-                return null;
-            } else if (lastGameSymbol == null) {
-                lastGameSymbol = gameSymbol;
-            } else if (lastGameSymbol != gameSymbol) {
-                return null;
-            }
-        }
-        return lastGameSymbol;
     }
 }
