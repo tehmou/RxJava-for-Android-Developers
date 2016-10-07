@@ -1,9 +1,13 @@
 package com.tehmou.tictactoe;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +18,10 @@ public class GameGridView extends View {
     private int width;
     private int height;
     private final Paint linePaint;
-    private final Paint circlePaint;
-    private final Paint crossPaint;
+    private final Paint bitmapPaint;
+    private final Bitmap circleBitmap;
+    private final Bitmap crossBitmap;
+    private final Rect bitmapSrcRect;
 
     public GameGridView(Context context) {
         this(context, null);
@@ -32,11 +38,11 @@ public class GameGridView extends View {
         linePaint.setColor(Color.BLACK);
         linePaint.setStrokeWidth(8f);
 
-        circlePaint = new Paint();
-        circlePaint.setColor(Color.RED);
+        bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        crossPaint = new Paint();
-        crossPaint.setColor(Color.BLUE);
+        circleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.symbol_circle);
+        crossBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.symbol_cross);
+        bitmapSrcRect = new Rect(0, 0, circleBitmap.getWidth(), circleBitmap.getHeight());
     }
 
     @Override
@@ -60,30 +66,33 @@ public class GameGridView extends View {
         }
 
         final float tileWidth = width / gameState.getWidth();
-        for (int i = 0; i <= gameState.getWidth(); i++) {
-            canvas.drawLine(i * tileWidth, 0, i * tileWidth, height, linePaint);
-        }
-
         final float tileHeight = height / gameState.getHeight();
-        for (int n = 0; n <= gameState.getHeight(); n++) {
-            canvas.drawLine(0, n * tileHeight, width, n * tileHeight, linePaint);
-        }
 
         for (int i = 0; i < gameState.getWidth(); i++) {
             for (int n = 0; n < gameState.getHeight(); n++) {
                 GameSymbol symbol = gameState.getSymbolAt(i, n);
+                RectF dst = new RectF(i * tileWidth, n * tileHeight,
+                        (i+1) * tileWidth, (n+1) * tileHeight);
                 if (symbol == GameSymbol.CIRCLE) {
-                    canvas.drawRect(
-                            i * tileWidth, n * tileHeight,
-                            (i+1) * tileWidth, (n+1) * tileHeight,
-                            circlePaint);
+                    canvas.drawBitmap(
+                            circleBitmap,
+                            bitmapSrcRect, dst,
+                            bitmapPaint);
                 } else if (symbol == GameSymbol.CROSS) {
-                    canvas.drawRect(
-                            i * tileWidth, n * tileHeight,
-                            (i+1) * tileWidth, (n+1) * tileHeight,
-                            crossPaint);
+                    canvas.drawBitmap(
+                            crossBitmap,
+                            bitmapSrcRect, dst,
+                            bitmapPaint);
                 }
             }
+        }
+
+        for (int i = 0; i <= gameState.getWidth(); i++) {
+            canvas.drawLine(i * tileWidth, 0, i * tileWidth, height, linePaint);
+        }
+
+        for (int n = 0; n <= gameState.getHeight(); n++) {
+            canvas.drawLine(0, n * tileHeight, width, n * tileHeight, linePaint);
         }
     }
 
