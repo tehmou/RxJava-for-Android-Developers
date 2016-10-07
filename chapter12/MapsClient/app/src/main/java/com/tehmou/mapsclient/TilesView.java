@@ -59,9 +59,10 @@ public class TilesView extends View {
                 if (tileBitmapLoader != null) {
                     bitmap = tileBitmapLoader.getBitmap(tile);
                 }
-                RectF dst = new RectF(tile.getScreenX(), tile.getScreenY(),
-                        tile.getScreenX() + tile.getWidth(),
-                        tile.getScreenY() + tile.getHeight());
+                RectF dst = new RectF(
+                        (float) tile.getScreenX(), (float) tile.getScreenY(),
+                        (float) (tile.getScreenX() + tile.getWidth()),
+                        (float) (tile.getScreenY() + tile.getHeight()));
                 if (bitmap != null) {
                     canvas.drawBitmap(bitmap, null, dst, bitmapPaint);
                 }

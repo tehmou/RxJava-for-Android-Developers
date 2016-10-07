@@ -54,6 +54,6 @@ public class TileBitmapLoader {
 
     private Observable<TileBitmap> loadTileBitmap(final Tile mapTile) {
         Log.d(TAG, "Loading bitmap for tile " + mapTile.toString());
-        return MapTileUtils.loadMapTile(mapNetworkAdapter).call(mapTile);
+        return MapTileNetworkUtils.loadMapTile(mapNetworkAdapter).call(mapTile);
     }
 }

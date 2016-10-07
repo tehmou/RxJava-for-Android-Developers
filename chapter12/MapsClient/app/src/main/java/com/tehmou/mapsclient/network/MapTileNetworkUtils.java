@@ -8,8 +8,8 @@ import com.tehmou.mapsclient.TileBitmap;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class MapTileUtils {
-    private static final String TAG = MapTileUtils.class.getSimpleName();
+public class MapTileNetworkUtils {
+    private static final String TAG = MapTileNetworkUtils.class.getSimpleName();
 
     static public Func1<Tile, Observable<TileBitmap>> loadMapTile(
             final MapNetworkAdapter mapNetworkAdapter) {
@@ -22,5 +22,4 @@ public class MapTileUtils {
                     return Observable.just(new TileBitmap(mapTile, null));
                 });
     }
-
 }

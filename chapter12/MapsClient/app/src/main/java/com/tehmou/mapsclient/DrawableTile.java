@@ -1,16 +1,16 @@
 package com.tehmou.mapsclient;
 
 public class DrawableTile extends Tile {
-    private final float screenX;
-    private final float screenY;
-    private final float width;
-    private final float height;
+    private final double screenX;
+    private final double screenY;
+    private final double width;
+    private final double height;
 
-    public DrawableTile(Tile tile, float screenX, float screenY, float width, float height) {
+    public DrawableTile(Tile tile, double screenX, double screenY, double width, double height) {
         this(tile.getX(), tile.getY(), tile.getZoom(), screenX, screenY, width, height);
     }
 
-    public DrawableTile(int x, int y, int zoom, float screenX, float screenY, float width, float height) {
+    public DrawableTile(int x, int y, int zoom, double screenX, double screenY, double width, double height) {
         super(x, y, zoom);
         this.screenX = screenX;
         this.screenY = screenY;
@@ -18,19 +18,19 @@ public class DrawableTile extends Tile {
         this.height = height;
     }
 
-    public float getScreenX() {
+    public double getScreenX() {
         return screenX;
     }
 
-    public float getScreenY() {
+    public double getScreenY() {
         return screenY;
     }
 
-    public float getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public float getHeight() {
+    public double getHeight() {
         return height;
     }
 }
