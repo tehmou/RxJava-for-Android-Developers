@@ -1,8 +1,5 @@
 package com.tehmou.mapsclient;
 
-/**
- * Created by ttuo on 21/09/16.
- */
 public class DrawableTile extends Tile {
     private final float screenX;
     private final float screenY;
@@ -10,11 +7,11 @@ public class DrawableTile extends Tile {
     private final float height;
 
     public DrawableTile(Tile tile, float screenX, float screenY, float width, float height) {
-        this(tile.getX(), tile.getY(), screenX, screenY, width, height);
+        this(tile.getX(), tile.getY(), tile.getZoom(), screenX, screenY, width, height);
     }
 
-    public DrawableTile(int x, int y, float screenX, float screenY, float width, float height) {
-        super(x, y);
+    public DrawableTile(int x, int y, int zoom, float screenX, float screenY, float width, float height) {
+        super(x, y, zoom);
         this.screenX = screenX;
         this.screenY = screenY;
         this.width = width;
