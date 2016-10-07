@@ -1,5 +1,6 @@
 package com.tehmou.mapsclient;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -30,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
 
         TilesView tilesView = (TilesView) findViewById(R.id.tiles_view);
         tilesView.setTileBitmapLoader(tileBitmapLoader);
-        final Collection<DrawableTile> tiles =
-                MapTileUtils.calculateMapTiles(
-                        TILE_SIZE, 2, new PointD(512, 512), new PointD(10, 10)
-                );
 
-        Observable.just(tiles)
+        Observable<PointD> tilesViewSize = tilesView.getViewSize();
+
+        tilesViewSize
+                .map(tilesViewSizeValue -> MapTileUtils.calculateMapTiles(
+                        TILE_SIZE, 2, tilesViewSizeValue, new PointD(0, 0)
+                ))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(tilesView::setTiles);
     }

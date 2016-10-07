@@ -13,7 +13,9 @@ import com.tehmou.mapsclient.network.TileBitmapLoader;
 
 import java.util.Collection;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subjects.BehaviorSubject;
 
 public class TilesView extends View {
     public TilesView(Context context) {
@@ -38,6 +40,7 @@ public class TilesView extends View {
         bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
+    private final BehaviorSubject<PointD> viewSize = BehaviorSubject.create();
     private Collection<DrawableTile> tiles;
     private Paint tilePaint;
     private Paint bitmapPaint;
@@ -48,6 +51,14 @@ public class TilesView extends View {
         this.tileBitmapLoader.bitmapsLoadedEvent()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ignore -> invalidate());
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        int width = right - left;
+        int height = bottom - top;
+        viewSize.onNext(new PointD(width, height));
     }
 
     @Override
@@ -77,5 +88,9 @@ public class TilesView extends View {
             tileBitmapLoader.load(tiles);
         }
         invalidate();
+    }
+
+    public Observable<PointD> getViewSize() {
+        return viewSize.asObservable();
     }
 }

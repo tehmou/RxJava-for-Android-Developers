@@ -14,11 +14,12 @@ public class MapTileUtils {
                                                               final Integer zoomLevel,
                                                               final PointD viewSize,
                                                               final PointD offset) {
+        Log.d(TAG, "calculateMapTiles(" + tileSizePx + ", " + zoomLevel + ", " + viewSize + ", " + offset + ")");
+
         final int firstTileX = (int) Math.floor(-offset.x / tileSizePx);
         final int firstTileY = (int) Math.floor(-offset.y / tileSizePx);
         final int lastTileX = (int) Math.ceil((-offset.x + viewSize.x) / tileSizePx);
         final int lastTileY = (int) Math.ceil((-offset.y + viewSize.y) / tileSizePx);
-
 
         final int left = Math.max(0, firstTileX);
         final int right = Math.min(1 << zoomLevel, lastTileX);
