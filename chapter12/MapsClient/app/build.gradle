@@ -31,6 +31,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.1'
 
+    // OkHttp for downloading maps
+    compile "com.squareup.okhttp:okhttp:2.0.0"
+
     // RxJava
     compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'

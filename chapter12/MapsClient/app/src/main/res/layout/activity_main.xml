@@ -13,4 +13,21 @@
         android:id="@+id/tiles_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/zoom_in_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        android:text="+"/>
+    <Button
+        android:id="@+id/zoom_out_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp"
+        android:textSize="20dp"
+        android:text="-"/>
 </FrameLayout>
