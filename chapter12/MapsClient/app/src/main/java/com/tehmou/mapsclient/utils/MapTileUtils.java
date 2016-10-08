@@ -1,7 +1,8 @@
-package com.tehmou.mapsclient;
+package com.tehmou.mapsclient.utils;
 
-import android.nfc.Tag;
 import android.util.Log;
+
+import com.tehmou.mapsclient.DrawableTile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,5 +39,22 @@ public class MapTileUtils {
             }
         }
         return mapTileList;
+    }
+
+    public static PointD calculateOffset(final CoordinateProjection coordinateProjection,
+                                         final Integer zoomLevel,
+                                         final PointD viewSize,
+                                         final LatLng center) {
+        final double mapPxSize = coordinateProjection.pxSize(zoomLevel);
+        final PointD centerPx = coordinateProjection
+                .fromLatLngToPoint(center.getLat(), center.getLng(), zoomLevel);
+        final double offsetX2 = centerPx.x - (mapPxSize / 2.0);
+        final double offsetY2 = centerPx.y - (mapPxSize / 2.0);
+        final double centerOffsetX = (viewSize.x - mapPxSize) / 2.0;
+        final double centerOffsetY = (viewSize.y - mapPxSize) / 2.0;
+        final double offsetX = centerOffsetX - offsetX2;
+        final double offsetY = centerOffsetY - offsetY2;
+        Log.d(TAG, "offsetPx(" + offsetX + ", " + offsetY + ")");
+        return new PointD(offsetX, offsetY);
     }
 }

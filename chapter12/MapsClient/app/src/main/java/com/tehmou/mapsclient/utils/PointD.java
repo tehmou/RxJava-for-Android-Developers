@@ -1,8 +1,5 @@
-package com.tehmou.mapsclient;
+package com.tehmou.mapsclient.utils;
 
-/**
- * Created by ttuo on 27/08/14.
- */
 public class PointD {
     final public double x;
     final public double y;

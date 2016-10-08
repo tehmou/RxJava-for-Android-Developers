@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.tehmou.mapsclient.network.TileBitmapLoader;
+import com.tehmou.mapsclient.utils.PointD;
 
 import java.util.Collection;
 
@@ -49,6 +50,7 @@ public class TilesView extends View {
     public void setTileBitmapLoader(TileBitmapLoader tileBitmapLoader) {
         this.tileBitmapLoader = tileBitmapLoader;
         this.tileBitmapLoader.bitmapsLoadedEvent()
+                .onBackpressureDrop()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ignore -> invalidate());
     }
