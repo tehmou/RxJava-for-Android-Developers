@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         final File root = new File(
                 Environment.getExternalStorageDirectory().getPath());
-        final BehaviorSubject<File> selectedFile =
-                BehaviorSubject.create(root);
+        store.setSelectedFile(root);
 
         Observable<File> listItemClickObservable =
                 Observable.create(subscriber ->
@@ -77,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         Observable<File> previousButtonObservable =
                 RxView.clicks(findViewById(R.id.previous_button))
-                        .map(event -> selectedFile.getValue().getParentFile());
+                        .withLatestFrom(store.getSelectedFile(),
+                                (ignore, selectedFile) -> selectedFile.getParentFile());
 
         Observable<File> rootButtonObservable =
                 RxView.clicks(findViewById(R.id.root_button))
@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 listItemClickObservable,
                 previousButtonObservable,
                 rootButtonObservable)
-                .subscribe(selectedFile);
+                .subscribe(store::setSelectedFile);
 
-        selectedFile
+        store.getSelectedFile()
                 .subscribeOn(Schedulers.io())
                 .doOnNext(file -> Log.d(TAG, "Selected file: " + file))
                 .flatMap(this::createFilesObservable)
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         e -> Log.e(TAG, "Error reading files", e),
                         () -> Log.d(TAG, "Completed"));
 
-        selectedFile
+        store.getSelectedFile()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(file -> setTitle(file.getAbsolutePath()));
     }
