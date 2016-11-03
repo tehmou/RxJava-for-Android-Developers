@@ -49,7 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initWithPermissions() {
         FileBrowserStore store = ((FileBrowserApplication) getApplication()).getStore();
+        initFileList(store);
         createChain(store);
+    }
+
+    private void initFileList(FileBrowserStore store) {
+        store.getSelectedFile()
+                .subscribeOn(Schedulers.io())
+                .flatMap(this::createFilesObservable)
+                .subscribe(store::setFiles);
     }
 
     private void createChain(FileBrowserStore store) {
@@ -89,12 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 rootButtonObservable)
                 .subscribe(store::setSelectedFile);
 
-        store.getSelectedFile()
-                .subscribeOn(Schedulers.io())
-                .doOnNext(file -> Log.d(TAG, "Selected file: " + file))
-                .flatMap(this::createFilesObservable)
-                .doOnNext(list -> Log.d(TAG, "Found " + list.size() + " files"))
-                .doOnNext(list -> Log.d(TAG, "Processing " + list.size() + " files"))
+        store.getFiles()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         files -> {
