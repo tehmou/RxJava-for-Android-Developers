@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initWithPermissions() {
+        FileBrowserStore store = ((FileBrowserApplication) getApplication()).getStore();
+        createChain(store);
+    }
+
+    private void createChain(FileBrowserStore store) {
 
         final ListView listView = (ListView) findViewById(R.id.list_view);
         FileListAdapter adapter =
