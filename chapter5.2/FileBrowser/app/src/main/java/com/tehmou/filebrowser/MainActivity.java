@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -25,6 +26,10 @@ import rx.subjects.BehaviorSubject;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    FileBrowserStore store;
+    ListView listView;
+    FileListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,28 +53,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initWithPermissions() {
-        FileBrowserStore store = ((FileBrowserApplication) getApplication()).getStore();
-        initFileList(store);
-        createChain(store);
+        initMembers();
+        initFileList();
+        initInputs();
+        initRendering();
     }
 
-    private void initFileList(FileBrowserStore store) {
+    private void initFileList() {
         store.getSelectedFile()
                 .subscribeOn(Schedulers.io())
-                .flatMap(this::createFilesObservable)
+                .flatMap(MainActivity::createFilesObservable)
                 .subscribe(store::setFiles);
     }
 
-    private void createChain(FileBrowserStore store) {
-
-        final ListView listView = (ListView) findViewById(R.id.list_view);
-        FileListAdapter adapter =
-                new FileListAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-        listView.setAdapter(adapter);
-
+    private static Observable<File> getSelectedFile(ListView listView,
+                                                    View previousButton,
+                                                    View rootButton,
+                                                    Observable<File> selectedFileObservable) {
         final File root = new File(
                 Environment.getExternalStorageDirectory().getPath());
-        store.setSelectedFile(root);
 
         Observable<File> listItemClickObservable =
                 Observable.create(subscriber ->
@@ -83,20 +85,39 @@ public class MainActivity extends AppCompatActivity {
                                 }));
 
         Observable<File> previousButtonObservable =
-                RxView.clicks(findViewById(R.id.previous_button))
-                        .withLatestFrom(store.getSelectedFile(),
+                RxView.clicks(previousButton)
+                        .withLatestFrom(selectedFileObservable,
                                 (ignore, selectedFile) -> selectedFile.getParentFile());
 
         Observable<File> rootButtonObservable =
-                RxView.clicks(findViewById(R.id.root_button))
+                RxView.clicks(rootButton)
                         .map(event -> root);
 
-        Observable.merge(
+        return Observable.merge(
                 listItemClickObservable,
                 previousButtonObservable,
-                rootButtonObservable)
-                .subscribe(store::setSelectedFile);
+                rootButtonObservable).startWith(root);
+    }
 
+    private void initMembers() {
+        store = ((FileBrowserApplication) getApplication()).getStore();
+        listView = (ListView) findViewById(R.id.list_view);
+        adapter =
+                new FileListAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        listView.setAdapter(adapter);
+
+    }
+
+    private void initInputs() {
+        getSelectedFile(
+                listView,
+                findViewById(R.id.previous_button),
+                findViewById(R.id.root_button),
+                store.getSelectedFile()
+        ).subscribe(store::setSelectedFile);
+    }
+
+    private void initRendering() {
         store.getFiles()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -113,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(file -> setTitle(file.getAbsolutePath()));
     }
 
-    private List<File> getFiles(final File f) {
+    private static List<File> getFiles(final File f) {
         List<File> fileList = new ArrayList<>();
         File[] files = f.listFiles();
 
@@ -128,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
         return fileList;
     }
 
-    Observable<List<File>> createFilesObservable(
-            final File f) {
+    private static Observable<List<File>> createFilesObservable(final File f) {
         return Observable.create(subscriber -> {
             try {
                 final List<File> fileList = getFiles(f);
