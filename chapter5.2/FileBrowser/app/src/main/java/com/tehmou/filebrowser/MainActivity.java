@@ -20,6 +20,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    FileBrowserStore store;
     ListView listView;
     FileListAdapter adapter;
 
@@ -53,13 +53,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initWithPermissions() {
+        FileBrowserStore store = ((FileBrowserApplication) getApplication()).getStore();
         initMembers();
-        initFileList();
-        initInputs();
-        initRendering();
+        initFileList(store);
+        initInputs(store.getSelectedFile(), store::setSelectedFile);
+        initRendering(store.getSelectedFile(), store.getFiles());
     }
 
-    private void initFileList() {
+    private void initFileList(FileBrowserStore store) {
         store.getSelectedFile()
                 .subscribeOn(Schedulers.io())
                 .flatMap(MainActivity::createFilesObservable)
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMembers() {
-        store = ((FileBrowserApplication) getApplication()).getStore();
         listView = (ListView) findViewById(R.id.list_view);
         adapter =
                 new FileListAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<>());
@@ -108,17 +108,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initInputs() {
+    private void initInputs(Observable<File> selectedFile,
+                            Action1<File> setSelectedFile) {
         getSelectedFile(
                 listView,
                 findViewById(R.id.previous_button),
                 findViewById(R.id.root_button),
-                store.getSelectedFile()
-        ).subscribe(store::setSelectedFile);
+                selectedFile
+        ).subscribe(setSelectedFile);
     }
 
-    private void initRendering() {
-        store.getFiles()
+    private void initRendering(Observable<File> selectedFile,
+                               Observable<List<File>> fileList) {
+        fileList
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         files -> {
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         e -> Log.e(TAG, "Error reading files", e),
                         () -> Log.d(TAG, "Completed"));
 
-        store.getSelectedFile()
+        selectedFile
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(file -> setTitle(file.getAbsolutePath()));
     }
