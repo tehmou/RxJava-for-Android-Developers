@@ -14,7 +14,7 @@ Chapter 5
 
 The Android File Browser Example is in a separate repository. See the releases chapter5-start and chapter5-end.
 
-[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example)
+[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter5-start)
 
 
 Chapter 6
@@ -22,5 +22,5 @@ Chapter 6
 
 The Android File Browser Example is in a separate repository. See the releases chapter6-start and chapter6-end.
 
-[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example)
+[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-start)
 
