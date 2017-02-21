@@ -12,15 +12,25 @@ Some chapter are directly in the master branch of this repository. More lenghty 
 Chapter 5
 ---------
 
-The Android File Browser Example is in a separate repository. See the releases chapter5-start and chapter5-end.
-
-[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter5-start)
+[Starting point](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter5-start)
+[Finished example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter5-end)
 
 
 Chapter 6
 ---------
 
-The Android File Browser Example is in a separate repository. See the releases chapter6-start and chapter6-end.
+[Starting point](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-start)
+[Finished example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-end)
 
-[https://github.com/tehmou/android-file-browser-example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-start)
 
+Chapter 7
+---------
+
+[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter7-start)
+[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter7-end)
+
+
+### Coffee Break 1
+
+[Starting point](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-start)
+[Final solution](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-end)
