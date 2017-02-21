@@ -34,3 +34,10 @@ Chapter 7
 
 [Starting point](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-start)
 [Final solution](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-end)
+
+
+### Coffee Break 2
+
+There is a separate branch chapter7-coffeebreak2 for the exercise. You can also find the triangle asset in it.
+
+[Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter7-coffeebreak2)
