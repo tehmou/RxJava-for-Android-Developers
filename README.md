@@ -11,6 +11,7 @@ Some chapter are directly in the master branch of this repository. More lenghty 
 
 Chapter 1
 ---------
+
 [Starting point](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-start)
 [Finished example](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-end)
 
@@ -18,6 +19,13 @@ Chapter 1
 ### Coffee Break
 [Starting point](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-coffeebreak1-start)
 [Finished example](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-coffeebreak1-end)
+
+
+Chapter 2
+---------
+
+[Starting point](https://github.com/tehmou/android-news-reader-example/releases/tag/chapter2-start)
+[Finished example](https://github.com/tehmou/android-news-reader-example/releases/tag/chapter2-end)
 
 
 Chapter 5
