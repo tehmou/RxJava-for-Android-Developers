@@ -9,6 +9,17 @@ Code Examples for Chapters
 Some chapter are directly in the master branch of this repository. More lenghty examples use separate repositories for more complete git history and change management.
 
 
+Chapter 1
+---------
+[Starting point](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-start)
+[Finished example](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-end)
+
+
+### Coffee Break
+[Starting point](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-coffeebreak1-start)
+[Finished example](https://github.com/tehmou/android-live-search-example/releases/tag/chapter1-coffeebreak1-end)
+
+
 Chapter 5
 ---------
 
