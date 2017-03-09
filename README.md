@@ -42,6 +42,15 @@ Chapter 3
 [Finished example](https://github.com/tehmou/android-credit-card-validator-example/releases/tag/chapter3-end)
 
 
+Chapter 4
+---------
+
+#### Flickr Client Example
+
+[Starting point](https://github.com/tehmou/android-flickr-client-example/releases/tag/chapter4-start)
+[Finished example](https://github.com/tehmou/android-flickr-client-example/releases/tag/chapter4-end)
+
+
 Chapter 5
 ---------
 
