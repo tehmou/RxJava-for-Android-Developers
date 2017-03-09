@@ -155,4 +155,14 @@ Chapter 13
 #### Fan Animation Example
 
 [Starting point](https://github.com/tehmou/android-fan-animation-example/releases/tag/chapter13-start)
-[Finished example](https://github.com/tehmou/android-fan-animation-example/releases/tag/chapter13-end) 
+[Finished example](https://github.com/tehmou/android-fan-animation-example/releases/tag/chapter13-end)
+
+
+Chapter 14
+----------
+
+#### Maps Client Example
+
+[Starting point](https://github.com/tehmou/android-maps-client-example/releases/tag/chapter14-start)
+[Finished example](https://github.com/tehmou/android-maps-client-example/releases/tag/chapter14-end)
+
