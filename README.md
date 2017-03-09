@@ -89,3 +89,22 @@ Chapter 7
 There is a separate branch chapter7-coffeebreak2 for the exercise. You can also find the triangle asset in it.
 
 [Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter7-coffeebreak2)
+
+
+Chapter 11
+----------
+
+#### Chat Client Example
+
+[Starting point](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter11-start)
+[Finished example](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter11-end)
+
+
+Chapter 12
+----------
+
+#### Chat Client Example (continued)
+
+[Starting point](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter12-start)
+[Finished example](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter12-end)
+ 
