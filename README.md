@@ -69,6 +69,15 @@ Chapter 6
 [Finished example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-end)
 
 
+Chapter 7
+---------
+
+#### File Browser example (continued)
+
+[Starting point](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter7-start)
+[Finished example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter7-end)
+
+
 Chapter 8
 ---------
 
