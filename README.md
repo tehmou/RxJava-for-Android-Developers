@@ -113,6 +113,15 @@ Chapter 9
 [Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter9-coffeebreak1-end)
 
 
+Chapter 10
+---------
+
+#### Tic-Tac-Toe Example (continued)
+
+[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter10-start)
+[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter10-end)
+
+
 Chapter 11
 ----------
 
