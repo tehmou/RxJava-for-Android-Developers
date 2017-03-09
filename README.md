@@ -147,4 +147,12 @@ Chapter 12
 
 [Starting point](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter12-start)
 [Finished example](https://github.com/tehmou/android-chat-client-example/releases/tag/chapter12-end)
- 
+
+
+Chapter 13
+----------
+
+#### Fan Animation Example
+
+[Starting point](https://github.com/tehmou/android-fan-animation-example/releases/tag/chapter13-start)
+[Finished example](https://github.com/tehmou/android-fan-animation-example/releases/tag/chapter13-end) 
