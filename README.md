@@ -69,26 +69,48 @@ Chapter 6
 [Finished example](https://github.com/tehmou/android-file-browser-example/releases/tag/chapter6-end)
 
 
-Chapter 7
+Chapter 8
 ---------
 
 #### Tic-Tac-Toe Example
 
-[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter7-start)
-[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter7-end)
+[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter8-start)
+[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter8-end)
 
 
 #### Coffee Break 1
 
-[Starting point](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-start)
-[Final solution](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter7-coffeebreak1-end)
+[Starting point](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter8-coffeebreak1-start)
+[Final solution](https://github.com/tehmou/android-withLatestFrom-example/releases/tag/chapter8-coffeebreak1-end)
 
 
 #### Coffee Break 2
 
-There is a separate branch chapter7-coffeebreak2 for the exercise. You can also find the triangle asset in it.
+There is a separate branch chapter8-coffeebreak2 for the exercise. You can also find the triangle asset in it.
 
-[Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter7-coffeebreak2)
+[Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak2)
+
+
+#### Coffee Break 3
+
+There is a separate branch chapter8-coffeebreak3 for the exercise. You can also find the triangle asset in it.
+
+[Coffee Break 3 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak3)
+
+
+Chapter 9
+---------
+
+#### Tic-Tac-Toe Example (continued)
+
+[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter9-start)
+[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter9-end)
+
+
+#### Coffee Break 1
+
+[Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter9-coffeebreak1-start)
+[Finished example](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter9-coffeebreak1-end)
 
 
 Chapter 11
