@@ -41,6 +41,10 @@ Chapter 3
 [Starting point](https://github.com/tehmou/android-credit-card-validator-example/releases/tag/chapter3-start)
 [Finished example](https://github.com/tehmou/android-credit-card-validator-example/releases/tag/chapter3-end)
 
+#### Coffee Break 1
+[Starting point](https://github.com/tehmou/android-credit-card-validator-example/releases/tag/chapter3-coffeebreak1-start)
+[Finished example](https://github.com/tehmou/android-credit-card-validator-example/releases/tag/chapter3-coffeebreak1-end)
+
 
 Chapter 4
 ---------
