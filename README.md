@@ -105,13 +105,6 @@ There is a separate branch chapter8-coffeebreak2 for the exercise. You can also 
 [Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak2)
 
 
-#### Coffee Break 3
-
-There is a separate branch chapter8-coffeebreak3 for the exercise.
-
-[Coffee Break 3 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak3)
-
-
 Chapter 9
 ---------
 
