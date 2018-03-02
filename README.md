@@ -3,6 +3,20 @@ Grokking Reactive User Interfaces
 
 Repository for code examples used in the book [Grokking Reactive User Interfaces](https://www.manning.com/books/grokking-reactive-user-interfaces)
 
+
+RxJava 2 Update
+---------------
+
+The code example are currently undergoing an update to RxJava 2. The following ones have already been updated:
+
+- [Live Search](https://github.com/tehmou/android-live-search-example)
+- [News Reader](https://github.com/tehmou/android-news-reader-example)
+- [Credit Card Validator](https://github.com/tehmou/android-credit-card-validator-example)
+- [Flickr Client](https://github.com/tehmou/android-flickr-client-example)
+- [File Browser](https://github.com/tehmou/android-file-browser-example)
+- [Tic Tac Toe](https://github.com/tehmou/android-tic-tac-toe-example)
+
+
 Code Examples for Chapters
 --------------------------
 
@@ -103,13 +117,6 @@ There is a separate branch chapter8-coffeebreak2 for the exercise. You can also 
 
 [Starting point](https://github.com/tehmou/android-tic-tac-toe-example/releases/tag/chapter8-coffeebreak2-start)
 [Coffee Break 2 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak2)
-
-
-#### Coffee Break 3
-
-There is a separate branch chapter8-coffeebreak3 for the exercise.
-
-[Coffee Break 3 branch](https://github.com/tehmou/android-tic-tac-toe-example/tree/chapter8-coffeebreak3)
 
 
 Chapter 9
